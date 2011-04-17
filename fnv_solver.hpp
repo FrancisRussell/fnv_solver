@@ -8,13 +8,17 @@
 class FNVSolver
 {
 private:
+  bool solved;
+  int startLength;
+  int solutionLength;
   FNVParam param;
   FNVAlgo algo;
   Constraint constraint;
 
 public:
-  FNVSolver(const FNVParam& param, const FNVAlgo& algo, const Constraint& constraint);
+  FNVSolver(const FNVParam& param, const FNVAlgo& algo, const Constraint& constraint, int startLength = 0);
   void solve();
+  int getSolutionLength() const;
 };
 
 #endif

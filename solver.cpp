@@ -24,11 +24,12 @@ int main(int argc, char** argv)
       std::cout << "Constraint: " << nullConstraint.getName() << std::endl;
       FNVSolver solver(fnvParam, fnvAlgo, nullConstraint);
       solver.solve();
+      const int solutionLength = solver.getSolutionLength();
 
       BOOST_FOREACH(const Constraint& constraint, constraints)
       {
         std::cout << "Constraint: " << constraint.getName() << std::endl;
-        FNVSolver solver(fnvParam, fnvAlgo, constraint);
+        FNVSolver solver(fnvParam, fnvAlgo, constraint, solutionLength);
         solver.solve();
       }
     }

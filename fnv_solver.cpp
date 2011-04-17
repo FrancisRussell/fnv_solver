@@ -3,16 +3,17 @@
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <cassert>
 
-FNVSolver::FNVSolver(const FNVParam& _param, const FNVAlgo& _algo, const Constraint& _constraint) :
-  param(_param), algo(_algo), constraint(_constraint)
+FNVSolver::FNVSolver(const FNVParam& _param, const FNVAlgo& _algo, 
+                     const Constraint& _constraint, const int _startLength) :
+  solved(false), startLength(_startLength), solutionLength(-1), param(_param), algo(_algo), constraint(_constraint)
 {
 }
 
 void FNVSolver::solve()
 {
-  bool solved = false;
-  int length = 1;
+  int length = startLength;
 
   while(!solved)
   {
@@ -43,6 +44,7 @@ void FNVSolver::solve()
     if (queryResult == INVALID)
     {
       solved = true;
+      solutionLength = length;
       const Expr data = vc_getCounterExample(checker, input);
 
       unsigned long bufferSize;
@@ -60,4 +62,10 @@ void FNVSolver::solve()
     vc_Destroy(checker);
     ++length;
   }
+}
+
+int FNVSolver::getSolutionLength() const
+{
+  assert(solved);
+  return solutionLength;
 }
