@@ -1,0 +1,13 @@
+I had to make the follwing changes to STP in order to obtain better
+performance:
+
+1. Switch the STP back-end to CRYPTOMINISAT. This can be achieved by
+modifying STP::TopLevelSTP in src/STPManager/STP.cpp.
+
+2. Alter the multiply variant to 1 (the simplest). This can be achieved
+by modifying BitBlaster<BBNode,BBNodeManagerT>::BBMult in
+src/to-sat/BitBlaster.cpp.
+
+With these changes, searching for a solution of length 6 for 64-bit
+FNV-1 only took around 90 seconds on a 2.4GHz Intel Core2 Duo. Without
+them, the same search took approximately 30 minutes.
