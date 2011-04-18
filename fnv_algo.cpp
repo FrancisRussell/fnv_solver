@@ -41,8 +41,8 @@ Expr FNVAlgo::fnv1a(VC& checker, const Expr& hash, const Expr& prime, const Expr
 std::vector<FNVAlgo> FNVAlgo::getAll()
 {
   std::vector<FNVAlgo> algos;
-  algos.push_back(FNVAlgo("FNV-1", &fnv1));
-  algos.push_back(FNVAlgo("FNV-1a", &fnv1a));
+  algos.push_back(FNVAlgo("1", &fnv1));
+  algos.push_back(FNVAlgo("1a", &fnv1a));
   return algos;
 }
 

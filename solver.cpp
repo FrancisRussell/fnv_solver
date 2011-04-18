@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 
     BOOST_FOREACH(const FNVAlgo& fnvAlgo, fnvAlgos)
     {
-      std::cout << "Algorithm: " << fnvAlgo.getName() << std::endl;
+      std::cout << "Algorithm: FNV-" << fnvAlgo.getName() << std::endl;
 
       const Constraint nullConstraint = Constraint::getNull();
       std::cout << "Constraint: " << nullConstraint.getName() << std::endl;

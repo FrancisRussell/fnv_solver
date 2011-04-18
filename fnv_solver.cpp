@@ -1,14 +1,24 @@
 #include <fnv_solver.hpp>
+#include <fnv_solution.hpp>
 #include <stp/c_interface.h>
 #include <iostream>
+#include <sstream>
 #include <cstdlib>
 #include <vector>
 #include <cassert>
+#include <string>
 
 FNVSolver::FNVSolver(const FNVParam& _param, const FNVAlgo& _algo, 
                      const Constraint& _constraint, const int _startLength) :
   solved(false), startLength(_startLength), solutionLength(-1), param(_param), algo(_algo), constraint(_constraint)
 {
+}
+
+std::string FNVSolver::getOctetName(const int index)
+{
+  std::ostringstream octetName;
+  octetName << "input_" << index;
+  return octetName.str();
 }
 
 void FNVSolver::solve()
@@ -24,14 +34,18 @@ void FNVSolver::solve()
     const Expr prime = vc_bvConstExprFromDecStr(checker, width, param.getPrimeCStr());
     const Expr zeroPrefix = vc_bvConstExprFromInt(checker, width-8, 0);
 
-    Expr input = vc_varExpr1(checker, "input", 0, 8*length);
     Expr hash = basis;
+    std::vector<Expr> inputOctets;
+    inputOctets.reserve(length);
 
-    for(int octet=length-1; octet>=0; --octet)
+    for(int octet=0; octet<length; ++octet)
     {
-      const Expr octetValue = vc_bvExtract(checker, input, 8*octet+7, 8*octet);
-      constraint(checker, octetValue);
-      const Expr extendedOctet = vc_bvConcatExpr(checker, zeroPrefix, octetValue);
+      const std::string octetName = getOctetName(octet);
+      const Expr inputOctet = vc_varExpr1(checker, octetName.c_str(), 0, 8);
+      inputOctets.push_back(inputOctet);
+
+      constraint(checker, inputOctet);
+      const Expr extendedOctet = vc_bvConcatExpr(checker, zeroPrefix, inputOctet);
       hash = algo(checker, hash, prime, extendedOctet);
     }
 
@@ -45,13 +59,8 @@ void FNVSolver::solve()
     {
       solved = true;
       solutionLength = length;
-      const Expr data = vc_getCounterExample(checker, input);
-
-      unsigned long bufferSize;
-      char* bufferAddress;
-      vc_printExprToBuffer(checker, data, &bufferAddress, &bufferSize);
-      std::cout << bufferAddress << std::endl;
-      free(bufferAddress);
+      FNVSolution solution(param, algo, checker, inputOctets);
+      std::cout << solution << std::endl;
     }
     else if (queryResult == ERROR)
     {
