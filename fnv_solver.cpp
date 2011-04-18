@@ -27,6 +27,7 @@ void FNVSolver::solve()
 
   while(!solved)
   {
+    std::cout << "Searching for solutions of length " << length << "..." << std::endl;
     const int width = param.getWidth();
     VC checker = vc_createValidityChecker();
 
