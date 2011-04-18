@@ -49,7 +49,7 @@ void FNVSolution::write(std::ostream& out) const
   out << prefix << "(";
   for(unsigned i=0; i<octets.size(); ++i)
   {
-    const char octet = octets[i];
+    const int octet = octets[i];
     static const char* digits = "0123456789abcdef";
     const char first = digits[octet >> 4];
     const char second = digits[octet & ((1<<4)-1)];
