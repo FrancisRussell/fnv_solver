@@ -33,7 +33,8 @@ void FNVSolver::solve()
 
     const Expr basis = vc_bvConstExprFromDecStr(checker, width, param.getBasisCStr());
     const Expr prime = vc_bvConstExprFromDecStr(checker, width, param.getPrimeCStr());
-    const Expr zeroPrefix = vc_bvConstExprFromInt(checker, width-8, 0);
+    const Expr zeroPrefix = vc_bvConstExprFromDecStr(checker, width-8, "0");
+    const Expr zeroResult = vc_bvConstExprFromDecStr(checker, width, "0");
 
     Expr hash = basis;
     std::vector<Expr> inputOctets;
@@ -50,7 +51,6 @@ void FNVSolver::solve()
       hash = algo(checker, hash, prime, extendedOctet);
     }
 
-    const Expr zeroResult = vc_bvConstExprFromInt(checker, width, 0);
     const Expr isZero = vc_eqExpr(checker, hash, zeroResult);
     const Expr isNotZero = vc_notExpr(checker, isZero);
     const int queryResult = vc_query(checker, isNotZero);
