@@ -2,7 +2,7 @@
 #include <vector>
 #include <sstream>
 #include <boost/foreach.hpp>
-#include <fnv_solution.hpp>
+#include "fnv_solution.hpp"
 #include <stp/c_interface.h>
 
 FNVSolution::FNVSolution(const FNVParam& param, const FNVAlgo& algo, VC& vc, 

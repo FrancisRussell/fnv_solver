@@ -1,4 +1,4 @@
-#include <constraint.hpp>
+#include "constraint.hpp"
 #include <vector>
 #include <cassert>
 #include <stp/c_interface.h>
