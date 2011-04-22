@@ -12,8 +12,15 @@ else()
   message(FATAL_ERROR "Unable to locate Boost.")
 endif()
 
-set (STP_INSTALL_PREFIX "$ENV{HOME}/opt/stp")
-include_directories ("${STP_INSTALL_PREFIX}/include")
-link_directories ("${STP_INSTALL_PREFIX}/lib")
+INCLUDE(FindPackageHandleStandardArgs)
+
+FIND_PATH(STP_INCLUDE_DIRS stp/c_interface.h
+  DOC "The folder containing the STP header folder."
+)
+
+FIND_LIBRARY(STP_LIBRARIES
+  NAMES stp
+  DOC "The location of the STP library."
+)
 
 add_subdirectory(src)
