@@ -1,0 +1,28 @@
+zero_prefix : BITVECTOR(24);
+ASSERT(zero_prefix = 0hex000000);
+
+basis, prime : BITVECTOR(32);
+ASSERT(prime=0hex01000193);
+ASSERT(basis=0hex811c9dc5);
+
+input : BITVECTOR(40);
+mul_0, mul_1, mul_2, mul_3, mul_4: BITVECTOR(32);
+xor_0, xor_1, xor_2, xor_3, xor_4: BITVECTOR(32);
+
+ASSERT(mul_0 = BVMULT(32, basis, prime));
+ASSERT(xor_0 = BVXOR(mul_0, zero_prefix@input[7:0]));
+
+ASSERT(mul_1 = BVMULT(32, xor_0, prime));
+ASSERT(xor_1 = BVXOR(mul_1, zero_prefix@input[15:8]));
+
+ASSERT(mul_2 = BVMULT(32, xor_1, prime));
+ASSERT(xor_2 = BVXOR(mul_2, zero_prefix@input[23:16]));
+
+ASSERT(mul_3 = BVMULT(32, xor_2, prime));
+ASSERT(xor_3 = BVXOR(mul_3, zero_prefix@input[31:24]));
+
+ASSERT(mul_4 = BVMULT(32, xor_3, prime));
+ASSERT(xor_4 = BVXOR(mul_4, zero_prefix@input[39:32]));
+
+QUERY(BVGT(xor_4, zero_prefix@0hex00) OR input=0x4F03C62DF4);
+COUNTEREXAMPLE;
