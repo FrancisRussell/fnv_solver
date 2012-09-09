@@ -1,16 +1,18 @@
-This code attempts to find the shortest input string (under different
-character class constraints) that hashes to zero using the
-Fowler-Noll-Vo[0] hash function. It does this by supplying the problem to
-the STP[1] constraint solver (which translates to SAT) for increasing
-lengths of input strings.
+This code attempts to find the shortest input string (under different character
+class constraints) that hashes to zero using different variants of the
+Fowler-Noll-Vo[0] hash function. It does this by supplying the problem to the
+STP[1] constraint solver (which translates to SAT) for increasing lengths of
+input strings.
 
 To build, where ${STP} is your STP installation:
 
 $ cmake -DSTP_INCLUDE_DIRS=${STP}/include -DSTP_LIBRARIES=${STP}/lib/libstp.a .
 $ make
 
-The solver is built as src/solver. You'll need to edit the source to
-attack a particular problem.
+The solver is built as src/solver. Problems are solved in approximate order of
+increasing difficultly. You'll need to edit the source if you only want to
+attack a particular problem. Using a checkpointing tool such as DMTCP is
+probably a good idea too.
 
 Unfortunately, I never got the solver to solve some of the larger FNV
 challenges[2], but it still acts as an example of how to use STP.
